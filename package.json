@@ -1,0 +1,25 @@
+{
+  "name": "kaste_2.0-backend",
+  "version": "1.0.0",
+  "description": "KASTE 2.0 BACKEND",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.17.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stutommi/kaste_2.0-backend.git"
+  },
+  "author": "Tommi Tampio",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stutommi/kaste_2.0-backend/issues"
+  },
+  "homepage": "https://github.com/stutommi/kaste_2.0-backend#readme"
+}
