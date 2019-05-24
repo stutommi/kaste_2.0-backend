@@ -5,7 +5,7 @@ const userType = gql`
   type User {
     id: ID!
     username: String!
-    Messages: [Message!]!
+    messages: [Message!]!
     passwordHash: String!
     name: String!
   }
