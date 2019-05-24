@@ -7,6 +7,10 @@ const mutation = gql`
       name: String!
       password: String!
     ): User!
+    createMessage(
+      user: String!
+      content: String!
+    ): Message!
   }
 `
 
