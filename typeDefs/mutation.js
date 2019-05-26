@@ -8,7 +8,6 @@ const mutation = gql`
       password: String!
     ): User!
     createMessage(
-      user: String!
       content: String!
     ): Message!
   }

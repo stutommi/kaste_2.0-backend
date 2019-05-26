@@ -33,7 +33,7 @@ const server = new ApolloServer({
 
     //   return { currentUser }
     // }
-    const currentUser = await User.findOne({ name: 'Tommi' })
+    const currentUser = await User.findOne({ name: 'Tommi Tampio' })
       .populate('messages', { content: 1, created: 1, id: 1 })
     return { currentUser }
   }
