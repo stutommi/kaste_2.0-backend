@@ -1,5 +1,6 @@
 // Libraries
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const { UserInputError } = require('apollo-server')
 // Models
 const User = require('../models/user')
@@ -31,6 +32,33 @@ const userResolvers = {
         throw new UserInputError(error.message, { invalidArgs: args })
       }
 
+    },
+    login: async (root, args) => {
+      try {
+        const user = await User.findOne({ username: args.username })
+
+        const passwordCorrect = !user || !args.password
+          ? false
+          : await bcrypt.compare(args.password, user.passwordHash)
+
+        if (!passwordCorrect) {
+          console.error('invalid username or password')
+          return new UserInputError('invalid username or password', {invalidArgs : args})
+        } else {
+
+          const userForToken = {
+            username: args.username,
+            id: user._id
+          }
+
+          return {
+            value: jwt.sign(userForToken, process.env.SECRET),
+            username: user.username
+          }
+        }
+      } catch (error) {
+        logger.error(error)
+      }
     }
   }
 }
