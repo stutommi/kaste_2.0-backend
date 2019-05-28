@@ -1,10 +1,11 @@
 // Libraries
-const { UserInputError, AuthenticationError } = require('apollo-server')
+const { UserInputError, AuthenticationError, PubSub } = require('apollo-server')
 // Models
 const Message = require('../models/message')
 const User = require('../models/user')
 // Utils
 const logger = require('../utils/logger')
+const pubsub = new PubSub()
 
 const messageResolvers = {
   Query: {
@@ -37,11 +38,18 @@ const messageResolvers = {
         await User.findByIdAndUpdate(currentUser._id, {
           messages: currentUser.messages.concat(savedMessage._id)
         })
+        // For subscriptions
+        pubsub.publish('messageAdded', {messageAdded: populatedMessage})
 
         return populatedMessage
       } catch (error) {
         throw new UserInputError(error.message, { invalidArgs: args })
       }
+    }
+  },
+  Subscription: {
+    messageAdded: {
+      subscribe: () => pubsub.asyncIterator(([['messageAdded']]))
     }
   }
 }
