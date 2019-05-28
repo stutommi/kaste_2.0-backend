@@ -1,15 +1,14 @@
 // Libraries
-const { ApolloServer } = require('apollo-server')
+const express = require('express')
+const { ApolloServer } = require('apollo-server-express')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
-
+const http = require('http')
 // Models
 const User = require('./models/user')
-
 // Utils
 const config = require('./utils/config')
 const logger = require('./utils/logger')
-
 // GQLtypeDefs and resolvers
 const { typeDefs } = require('./typeDefs')
 const { resolvers } = require('./resolvers')
@@ -24,21 +23,31 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: async ({ req }) => {
+
     const authorization = req ? req.headers.authorization : null
 
-    // if (authorization && authorization.startsWith('bearer ')) {
-    //   const decodedToken = jwt.verify(authorization.substring(7), config.SECRET)
+    if (authorization && authorization.startsWith('bearer ')) {
 
-    //   const currentUser = await User.findById(decodedToken.id)
+      const decodedToken = jwt.verify(authorization.substring(7), config.SECRET)
 
-    //   return { currentUser }
-    // }
-    const currentUser = await User.findOne({ name: 'Tommi Tampio' })
-      .populate('messages', { content: 1, created: 1, id: 1 })
-    return { currentUser }
+      const currentUser = await User.findById(decodedToken.id)
+        .populate('messages', { content: 1, created: 1, id: 1 })
+
+      return { currentUser }
+    }
   }
 })
 
-server.listen().then(({ url }) =>
-  console.log(`🚀 Server ready at ${url}`)
-)
+const app = express()
+app.use(express.static('build'))
+
+server.applyMiddleware({ app })
+
+// Subscriptions
+const httpServer = http.createServer(app)
+server.installSubscriptionHandlers(httpServer)
+
+httpServer.listen({ port: config.PORT }, () => {
+  console.log(`🚀 Server ready at http://localhost:${config.PORT}${server.graphqlPath}`)
+  console.log(`🚀 Subscriptions ready at ws://localhost:${config.PORT}${server.subscriptionsPath}`)
+})

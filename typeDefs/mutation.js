@@ -10,6 +10,10 @@ const mutation = gql`
     createMessage(
       content: String!
     ): Message!
+    login(
+      password: String!
+      username: String!
+    ): Token
   }
 `
 
