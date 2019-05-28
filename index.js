@@ -4,6 +4,7 @@ const { ApolloServer } = require('apollo-server-express')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const http = require('http')
+const cors = require('cors')
 // Models
 const User = require('./models/user')
 // Utils
@@ -40,6 +41,7 @@ const server = new ApolloServer({
 
 const app = express()
 app.use(express.static('build'))
+app.use(cors())
 
 server.applyMiddleware({ app })
 
