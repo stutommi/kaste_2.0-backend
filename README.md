@@ -1,8 +1,8 @@
 KASTE 2.0 BACKEND
 
-Node.js and Apollo (GraphQL)
+Node.js, Mongo and Apollo (GraphQL)
 
-Link to frontend: https://github.com/stutommi/kaste_2.0-frontend
+Link to frontend source: https://github.com/stutommi/kaste_2.0-frontend
 
 This is a project that aims to update my first plant-watering app called kaste. It is a collaboration with my brother. My brother takes care of sensordata and watering mechanics, and makes it accessible through an API. My job is to store that data to database and provide information and interactivity to be accessed by the user from the UI.
 
