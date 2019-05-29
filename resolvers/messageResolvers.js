@@ -4,7 +4,6 @@ const { UserInputError, AuthenticationError, PubSub } = require('apollo-server')
 const Message = require('../models/message')
 const User = require('../models/user')
 // Utils
-const logger = require('../utils/logger')
 const pubsub = new PubSub()
 
 const messageResolvers = {

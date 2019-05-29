@@ -31,7 +31,6 @@ const userResolvers = {
       } catch (error) {
         throw new UserInputError(error.message, { invalidArgs: args })
       }
-
     },
     login: async (root, args) => {
       try {
@@ -43,7 +42,7 @@ const userResolvers = {
 
         if (!passwordCorrect) {
           console.error('invalid username or password')
-          return new UserInputError('invalid username or password', {invalidArgs : args})
+          return new UserInputError('invalid username or password', { invalidArgs: args })
         } else {
 
           const userForToken = {
@@ -53,12 +52,19 @@ const userResolvers = {
 
           return {
             value: jwt.sign(userForToken, process.env.SECRET),
-            username: user.username
+            username: user.username,
+            sensorEndpoint: user.sensorEndpoint
           }
         }
       } catch (error) {
         logger.error(error)
       }
+    },
+    editUserSensorEndpoint: async (root, args, { currentUser }) => {
+      console.log('args', args)
+      const updatedUser = await User.findByIdAndUpdate(currentUser.id, { $set: {sensorEndpoint: args.sensorEndpoint}}, {new: true})
+
+      return updatedUser
     }
   }
 }

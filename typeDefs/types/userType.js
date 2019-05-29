@@ -7,6 +7,7 @@ const userType = gql`
     username: String!
     messages: [Message!]!
     passwordHash: String!
+    sensorEndpoint: String
     name: String!
   }
 `

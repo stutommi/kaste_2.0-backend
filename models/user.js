@@ -15,13 +15,16 @@ const schema = mongoose.Schema({
     type: String,
     required: true
   },
+  sensorEndpoint: {
+    type: String,
+    default: ''
+  },
   messages: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Message'
     }
   ]
-
 })
 
 schema.plugin(uniqueValidator)

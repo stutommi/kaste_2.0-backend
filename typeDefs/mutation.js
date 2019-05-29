@@ -6,6 +6,10 @@ const mutation = gql`
       username: String!
       name: String!
       password: String!
+      sensorEndpoint: String
+    ): User!
+    editUserSensorEndpoint(
+      sensorEndpoint: String!
     ): User!
     createMessage(
       content: String!

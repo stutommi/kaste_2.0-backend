@@ -4,6 +4,7 @@ const tokenType = gql`
 type Token {
   value: String!
   username: String!
+  sensorEndpoint: String!
 }
 `
 
