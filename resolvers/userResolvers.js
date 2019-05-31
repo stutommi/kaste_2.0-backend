@@ -61,7 +61,6 @@ const userResolvers = {
       }
     },
     editUserSensorEndpoint: async (root, args, { currentUser }) => {
-      console.log('args', args)
       const updatedUser = await User.findByIdAndUpdate(currentUser.id, { $set: {sensorEndpoint: args.sensorEndpoint}}, {new: true})
 
       return updatedUser
