@@ -33,7 +33,6 @@ const server = new ApolloServer({
 
       const currentUser = await User.findById(decodedToken.id)
         .populate('messages', { content: 1, created: 1, id: 1 })
-
       return { currentUser }
     }
   }

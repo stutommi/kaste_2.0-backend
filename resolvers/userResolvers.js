@@ -9,7 +9,9 @@ const logger = require('../utils/logger')
 
 const userResolvers = {
   Query: {
-    me: (root, args, { currentUser }) => currentUser
+    me: (root, args, { currentUser }) => {
+      return currentUser
+    }
   },
   Mutation: {
     createUser: async (root, args) => {
