@@ -13,8 +13,6 @@ const messageResolvers = {
   },
   Mutation: {
     createMessage: async (root, args, { currentUser }) => {
-      console.log('args createMessage', args)
-      console.log('currentUser', currentUser)
 
       if (!currentUser) {
         throw new AuthenticationError('Not authenticated')
