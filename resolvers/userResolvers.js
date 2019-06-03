@@ -63,7 +63,36 @@ const userResolvers = {
       }
     },
     editUserSensorEndpoint: async (root, args, { currentUser }) => {
-      const updatedUser = await User.findByIdAndUpdate(currentUser.id, { $set: {sensorEndpoint: args.sensorEndpoint}}, {new: true})
+      console.log('____________')
+
+      const updatedUser = await User.findByIdAndUpdate(currentUser.id, { $set: { sensorEndpoint: args.sensorEndpoint } }, { new: true })
+
+      const prevEndpoint = currentUser.sensorEndpoint
+      console.log('prevEndpoint', prevEndpoint)
+
+      // Start Fetching from new endpoint if it doesn't have any current users connected
+      const usersWithPrevEndpoint = await User.find({ sensorEndpoint: args.sensorEndpoint })
+      if (usersWithPrevEndpoint.length === 0) {
+        console.log('KESKEN')
+        
+      }
+
+      // Quit fethching endpoint if it doesn't have any users connected
+      if (prevEndpoint) {
+        console.log('PREV endpoint was not empty string')
+        
+        const usersWithPrevEndpoint = await User.find({ sensorEndpoint: prevEndpoint })
+        
+        console.log('usersWithPrevEndpoint', usersWithPrevEndpoint.length)
+
+        if (usersWithPrevEndpoint.length === 0) {
+          console.log('SHUTDOWN INTERVAL')
+        }
+      }
+
+
+
+      const dropConnectionToEndpoint = ''
 
       return updatedUser
     }
