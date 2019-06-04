@@ -6,6 +6,8 @@ const { UserInputError } = require('apollo-server')
 const User = require('../models/user')
 // Utils
 const logger = require('../utils/logger')
+const intervalIdObject = require('../sensorEndpoints')
+const { fetchSensors, startFetchingAllEndpoints, disconnectIfNoUsers } = require('../utils/sensorFuncs')
 
 const userResolvers = {
   Query: {
@@ -74,25 +76,13 @@ const userResolvers = {
       const usersWithPrevEndpoint = await User.find({ sensorEndpoint: args.sensorEndpoint })
       if (usersWithPrevEndpoint.length === 0) {
         console.log('KESKEN')
-        
+
       }
 
-      // Quit fethching endpoint if it doesn't have any users connected
-      if (prevEndpoint) {
-        console.log('PREV endpoint was not empty string')
-        
-        const usersWithPrevEndpoint = await User.find({ sensorEndpoint: prevEndpoint })
-        
-        console.log('usersWithPrevEndpoint', usersWithPrevEndpoint.length)
-
-        if (usersWithPrevEndpoint.length === 0) {
-          console.log('SHUTDOWN INTERVAL')
-        }
+      if (prevEndpoint !== '') {
+        disconnectIfNoUsers(prevEndpoint, intervalIdObject.get())
       }
 
-
-
-      const dropConnectionToEndpoint = ''
 
       return updatedUser
     }

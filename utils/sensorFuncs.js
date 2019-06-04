@@ -1,10 +1,9 @@
 // Libraries
 const axios = require('axios')
-const moment = require ('moment')
+const moment = require('moment')
 // Models
 const SensorDataByDay = require('../models/sensorDataByDay')
 const User = require('../models/user')
-const intervalIdObject = {}
 
 ////////////////////////////////////////////
 // FETCH SENSORS FROM SINGLE URL ENDPOINT //
@@ -55,42 +54,49 @@ const fetchSensors = async url => {
 /////////////////////////////////////////////////////////////
 // START FETCHING ALL SENSORS WHICH USERS ARE CONNECTED TO //
 /////////////////////////////////////////////////////////////
-const startFetchingAllEndpoints = async () => {
+
+const startFetchingAllEndpoints = async (fetchFunc) => {
   // Find all users with sensorEndpoints
-  const allUsers = await User.find({ sensorEndpoint: { $ne: null } })
+  const allUsers = await User.find({ sensorEndpoint: { $ne: '' } })
+  console.log('*************')
 
   const endpointArray = allUsers
-    .map(user =>
-      endpointArray
-        .includes(user.sensorEndpoint)
-        ? null
-        : endpointArray.concat(user.sensorEndpoint)
-    )
+    .map(user => user.sensorEndpoint)
+    .reduce((acc, cur) => {
+      if (!acc.includes(cur)) {
+        acc.push(cur)
+      }
 
-  //DELETE LATER
-  console.log('endpointArray', endpointArray)
+      return acc
+    }, [])
 
   // Returns interval IDs and endpoints wrapped in objects to on Array
-  const intervalIdArray = endpointArray.map(async endPoint => {
+  const intervalIdArray = endpointArray.map(endpoint => {
     // Initial fetch
-    fetchSensors(endPoint)
+    fetchFunc(endpoint)
     // Set interval and store Id in variable
     const intervalId = setInterval(() => {
-      fetchSensors(endPoint)
+      fetchFunc(endpoint)
     },
       // Granularity for fetching (30mins)
-      1000 * 60 * 30)
-
-    return { endPoint, intervalId }
+      1000)
+    return { endpoint, intervalId }
   })
-// CONTINUE : MAKE INTERVALIDARRAY INTO INTERVALIDOBJECT :) huhhuh
 
+  const intervalIdObject = intervalIdArray
+    .reduce((acc, cur) => {
+      acc[cur.endpoint] = cur.intervalId
+      return acc
+    }, {})
+
+  return intervalIdObject
 }
 
 //////////////////////////////////////////////////////////////////////
 // START FETCHING FROM NEW ENDPOINT IF IT DOESN'T HAVE ANY CURRENT  //
 // USERS CONNECTED                                                  //
 //////////////////////////////////////////////////////////////////////
+
 const connectSensorUrlIfNew = async newUrl => {
   const usersWithNewEndpoint = await User.find({ sensorEndpoint: newUrl })
 
@@ -101,4 +107,20 @@ const connectSensorUrlIfNew = async newUrl => {
 
 }
 
-module.exports = { startFetchingAllEndpoints, connectSensorUrlIfNew }
+////////////////////////////////////////////////////////////////////
+// QUIT FETCHING ENDPOINT IF IT DOESN'T HAVE ANY USERS CONNECTED  //
+////////////////////////////////////////////////////////////////////
+
+const disconnectIfNoUsers = async (url, intervalIdObject) => {
+  console.log('HERE')
+
+  const usersWithEndpoint = await User.find({ sensorEndpoint: url })
+
+  if (usersWithEndpoint.length === 0) {
+    console.log('DELETING ENDPOINT: ', url)
+    clearInterval(intervalIdObject[url])
+    delete intervalIdObject[url]
+  }
+}
+
+module.exports = { fetchSensors, startFetchingAllEndpoints, connectSensorUrlIfNew, disconnectIfNoUsers }
