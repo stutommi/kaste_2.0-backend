@@ -1,7 +1,5 @@
 const mongoose = require('mongoose')
 
-// Granularity = 30 min
-
 const sensorDataSchema = mongoose.Schema({
 
   // Required fields

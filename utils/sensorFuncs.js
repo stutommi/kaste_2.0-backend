@@ -8,6 +8,7 @@ const User = require('../models/user')
 ////////////////////////////////////////////
 // FETCH SENSORS FROM SINGLE URL ENDPOINT //
 ////////////////////////////////////////////
+
 const fetchSensors = async url => {
   const { data } = await axios.get(url)
 
@@ -39,8 +40,8 @@ const fetchSensors = async url => {
           day: moment.utc().startOf('day'),
           owner: sensor.owner
         }, {
-            $push: { measures: measures }
-          }, { upsert: true })
+          $push: { measures: measures }
+        }, { upsert: true })
     } catch (error) {
       console.error(error.message)
     }
@@ -78,8 +79,8 @@ const startFetchingAllEndpoints = async (fetchFunc) => {
     const intervalId = setInterval(() => {
       fetchFunc(endpoint)
     },
-      // Granularity for fetching (30mins)
-      1000)
+    // Granularity for fetching (30mins)
+    1000 * 60 * 30)
     return { endpoint, intervalId }
   })
 
@@ -97,14 +98,22 @@ const startFetchingAllEndpoints = async (fetchFunc) => {
 // USERS CONNECTED                                                  //
 //////////////////////////////////////////////////////////////////////
 
-const connectSensorUrlIfNew = async newUrl => {
+const connectSensorUrlIfNew = async (newUrl, intervalIdObject) => {
   const usersWithNewEndpoint = await User.find({ sensorEndpoint: newUrl })
 
-  if (usersWithNewEndpoint.length === 0) {
-    console.log('START FETCHING NEW URL')
+  // Check if only one user has new sensor endpoint
+  if (usersWithNewEndpoint.length === 1) {
+    console.log('CONNECTING ENDPOINT')
 
+    fetchSensors(newUrl)
+    const intervalId = setInterval(() => {
+      fetchSensors(newUrl)
+      // Granularity for fetching (30mins)
+    }, 1000 * 60 * 30)
+
+    // Add interval id to interval object
+    intervalIdObject[newUrl] = intervalId
   }
-
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -112,8 +121,6 @@ const connectSensorUrlIfNew = async newUrl => {
 ////////////////////////////////////////////////////////////////////
 
 const disconnectIfNoUsers = async (url, intervalIdObject) => {
-  console.log('HERE')
-
   const usersWithEndpoint = await User.find({ sensorEndpoint: url })
 
   if (usersWithEndpoint.length === 0) {

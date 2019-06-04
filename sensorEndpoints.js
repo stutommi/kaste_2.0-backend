@@ -1,19 +1,10 @@
-const { fetchSensors, startFetchingAllEndpoints, disconnectIfNoUsers } = require('./utils/sensorFuncs')
+const { fetchSensors, startFetchingAllEndpoints, } = require('./utils/sensorFuncs')
 
-// object to store intervals to
+// Starts fetching sensor urls and stores intervals in an object
 let intervalIdObject = startFetchingAllEndpoints(fetchSensors)
   .then(endpointIntervals => {
     intervalIdObject = endpointIntervals
   })
-
-
-setInterval(() => {
-
-}, 1000)
-// setTimeout(() => {
-//   disconnectIfNoUsers('http://86.115.57.126:8001/ws/pasila_sensors', intervalIdObject)
-
-// }, 4000)
 
 module.exports = {
   get: () => intervalIdObject,

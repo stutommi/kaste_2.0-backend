@@ -7,7 +7,7 @@ const User = require('../models/user')
 // Utils
 const logger = require('../utils/logger')
 const intervalIdObject = require('../sensorEndpoints')
-const { fetchSensors, startFetchingAllEndpoints, disconnectIfNoUsers } = require('../utils/sensorFuncs')
+const { connectSensorUrlIfNew, disconnectIfNoUsers } = require('../utils/sensorFuncs')
 
 const userResolvers = {
   Query: {
@@ -65,25 +65,21 @@ const userResolvers = {
       }
     },
     editUserSensorEndpoint: async (root, args, { currentUser }) => {
-      console.log('____________')
 
       const updatedUser = await User.findByIdAndUpdate(currentUser.id, { $set: { sensorEndpoint: args.sensorEndpoint } }, { new: true })
-
+      
       const prevEndpoint = currentUser.sensorEndpoint
-      console.log('prevEndpoint', prevEndpoint)
-
+      
       // Start Fetching from new endpoint if it doesn't have any current users connected
-      const usersWithPrevEndpoint = await User.find({ sensorEndpoint: args.sensorEndpoint })
-      if (usersWithPrevEndpoint.length === 0) {
-        console.log('KESKEN')
-
+      if (args.sensorEndpoint !== '') {
+        connectSensorUrlIfNew(args.sensorEndpoint, intervalIdObject.get())
       }
-
+      
+      // Stop Fetching from endpoint if it doesn't have any current users connected
       if (prevEndpoint !== '') {
         disconnectIfNoUsers(prevEndpoint, intervalIdObject.get())
       }
-
-
+      
       return updatedUser
     }
   }
