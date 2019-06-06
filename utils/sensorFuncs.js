@@ -27,7 +27,7 @@ const fetchSensors = async url => {
     'soil_moisture'
   ]
 
-  // format sensors for update
+  // format sensors for update to DB
   sensors.forEach(async sensor => {
     const measures = Object.keys(sensor)
       .filter(key => measureTypes.includes(key))

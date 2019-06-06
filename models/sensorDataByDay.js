@@ -52,7 +52,6 @@ const sensorDataByDaySchema = mongoose.Schema({
   },
   measures: [sensorDataSchema]
 
-}
-)
+})
 
 module.exports = mongoose.model('SensorData', sensorDataByDaySchema)

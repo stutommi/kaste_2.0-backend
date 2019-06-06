@@ -1,9 +1,14 @@
 const { gql } = require('apollo-server')
 
+
+
 const chartDataType = gql`
+
+scalar Date
+
 type ChartData {
-  time: [String!]!
-  temperatureC: [Int!]!
+  time: [Date!]!
+  temperatureC: [Float!]!
   nutrient: [Int]
   light: [Int]
   soilMoisture: [Int]
