@@ -26,11 +26,10 @@ const messageResolvers = {
       try {
         // Save new message
         const savedMessage = await newMessage.save()
-        console.log('savedMessage', savedMessage)
 
         const populatedMessage = await Message.findById(savedMessage._id)
           .populate('user')
-        console.log('populatedMessage', populatedMessage)
+
         // Update users messages array
         await User.findByIdAndUpdate(currentUser._id, {
           messages: currentUser.messages.concat(savedMessage._id)

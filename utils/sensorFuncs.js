@@ -59,7 +59,6 @@ const fetchSensors = async url => {
 const startFetchingAllEndpoints = async (fetchFunc) => {
   // Find all users with sensorEndpoints
   const allUsers = await User.find({ sensorEndpoint: { $ne: '' } })
-  console.log('*************')
 
   const endpointArray = allUsers
     .map(user => user.sensorEndpoint)
