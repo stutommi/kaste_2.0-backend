@@ -45,7 +45,6 @@ const userResolvers = {
           : await bcrypt.compare(args.password, user.passwordHash)
 
         if (!passwordCorrect) {
-          console.error('invalid username or password')
           return new UserInputError('invalid username or password', { invalidArgs: args })
         } else {
 

@@ -18,8 +18,16 @@ const mutation = gql`
       password: String!
       username: String!
     ): Token
+    ${
+  // Include DB resetting for test enviroment
+  process.env.NODE_ENV === 'test'
+    ? 'resetDB: Void'
+    : ''
+}
   }
 `
+
+
 
 module.exports = {
   mutation
