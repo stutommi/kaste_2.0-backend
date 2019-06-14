@@ -4,13 +4,15 @@ const { chartDataResolvers } = require('./chartDataResolvers')
 const { dateResolver } = require('./dateResolver')
 const { testSetupResolvers } = require('./testSetupResolvers')
 const { sensorDataResolvers } = require('./sensorDataResolvers')
+const { sensorEndpointActions } = require('./sensorEndpointActionResolvers')
 
 const resolvers = [
   userResolvers,
   messageResolvers,
   chartDataResolvers,
   dateResolver,
-  sensorDataResolvers
+  sensorDataResolvers,
+  sensorEndpointActions
 ]
 
 // Include DB resetting resolver for test enviroment

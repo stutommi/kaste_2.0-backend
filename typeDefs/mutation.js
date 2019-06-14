@@ -18,6 +18,10 @@ const mutation = gql`
       password: String!
       username: String!
     ): Token
+    startWatering(sensorEndpoint: String!): Void
+    stopWatering(sensorEndpoint: String!): Void
+    reboot(sensorEndpoint: String!): Void
+
     ${
   // Include DB resetting for test enviroment
   process.env.NODE_ENV === 'test'
