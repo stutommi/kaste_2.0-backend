@@ -17,6 +17,7 @@ const query = gql`
     chartData( id: Int!, type: HousePlant!, range: DayWeekMonthYear!): ChartData!
     me: User
     messages: [Message!]!
+    sensorData(sensorEndpoint: String!): SensorData! 
   }
 `
 
