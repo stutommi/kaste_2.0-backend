@@ -66,7 +66,7 @@ const chartDataResolvers = {
 
       if (type === 'PLANT') {
 
-        // Helper func to format house type sensor response manually..
+        // Helper func to format plant type sensor response manually..
         const formatPlantResponse = (response) => {
           const formattedResponse = response
             .reduce((obj, cur) => {
