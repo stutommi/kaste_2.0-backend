@@ -5,7 +5,7 @@ const SensorData = require('../models/sensorDataByDay')
 
 //**********************************//
 // 1.1: sensor queries: TYPE HOUSE  //
-// 1.2: sensor queries: TYPE HOUSE  //
+// 1.2: sensor queries: TYPE PLANT  //
 //**********************************//
 
 ///////////////////////
