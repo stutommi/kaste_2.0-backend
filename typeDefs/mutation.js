@@ -21,6 +21,7 @@ const mutation = gql`
     startWatering(sensorEndpoint: String!): Void
     stopWatering(sensorEndpoint: String!): Void
     reboot(sensorEndpoint: String!): Void
+    validateSensorEndpoint(sensorEndpoint: String!): Void
 
     ${
   // Include DB resetting for test enviroment
