@@ -1,5 +1,7 @@
 const axios = require('axios')
 
+// This resolver simply directs the and returns JSON data from sensor endpoint
+
 const sensorDataResolvers = {
   Query: {
     sensorData: async (root, { sensorEndpoint }) => {

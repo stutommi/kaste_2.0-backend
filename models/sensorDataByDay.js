@@ -48,6 +48,7 @@ const sensorDataByDaySchema = mongoose.Schema({
   },
   day: {
     type: Date,
+    // Mongo removes document after a year
     expires: 60*60*24*7*4*12,
     required: true
   },

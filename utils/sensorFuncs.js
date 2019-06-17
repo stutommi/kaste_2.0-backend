@@ -10,30 +10,30 @@ const User = require('../models/user')
 ////////////////////////////////////////////
 
 const fetchSensors = async url => {
-  const { data } = await axios.get(url)
+  try {
+    const { data } = await axios.get(url)
 
-  // Merge different sensortypes
-  const sensors = Object.values(data.sensors)
-    .reduce((acc, cur) => acc.concat(cur))
+    // Merge different sensortypes
+    const sensors = Object.values(data.sensors)
+      .reduce((acc, cur) => acc.concat(cur))
 
-  const measureTypes = [
-    'temperature_C',
-    'type',
-    'location',
-    'time',
-    'humidity',
-    'nutrient',
-    'light',
-    'soil_moisture'
-  ]
+    const measureTypes = [
+      'temperature_C',
+      'type',
+      'location',
+      'time',
+      'humidity',
+      'nutrient',
+      'light',
+      'soil_moisture'
+    ]
 
-  // format sensors for update to DB
-  sensors.forEach(async sensor => {
-    const measures = Object.keys(sensor)
-      .filter(key => measureTypes.includes(key))
-      .reduce((res, key) => (res[key] = sensor[key], res), {})
+    // format sensors for update to DB
+    sensors.forEach(async sensor => {
+      const measures = Object.keys(sensor)
+        .filter(key => measureTypes.includes(key))
+        .reduce((res, key) => (res[key] = sensor[key], res), {})
 
-    try {
       await SensorDataByDay
         .updateOne({
           sensorId: sensor.id,
@@ -42,13 +42,14 @@ const fetchSensors = async url => {
         }, {
           $push: { measures: measures }
         }, { upsert: true })
-    } catch (error) {
-      console.error(error.message)
-    }
 
-  })
+    })
 
-  console.log('Update:' + new Date(Date.now()).toUTCString())
+    console.log('Update:' + new Date(Date.now()).toUTCString())
+  }
+  catch (error) {
+    console.error(error)
+  }
 }
 
 

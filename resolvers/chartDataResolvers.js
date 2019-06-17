@@ -16,9 +16,6 @@ const chartDataResolvers = {
   Query: {
     chartData: async (root, { id, type, range }) => {
 
-      const start = Date.now()
-      console.log('ID: ', id, 'TYPE: ', type, 'RANGE: ', range)
-
       if (type === 'HOUSE') {
 
         // Helper func to format house type sensor response manually..
@@ -40,25 +37,21 @@ const chartDataResolvers = {
         case 'DAY':
           return queryHouseByDay(id)
             .then(res => {
-              console.log('TIME', Date.now() - start)
               return formatHouseResponse(res)
             })
         case 'WEEK':
           return queryHouseByWeek(id)
             .then(res => {
-              console.log('TIME', Date.now() - start)
               return formatHouseResponse(res)
             })
         case 'MONTH':
           return queryHouseByMonth(id)
             .then(res => {
-              console.log('TIME', Date.now() - start)
               return formatHouseResponse(res)
             })
         case 'YEAR':
           return queryHouseByYear(id)
             .then(res => {
-              console.log('TIME', Date.now() - start)
               return formatHouseResponse(res)
             })
         }
@@ -93,27 +86,21 @@ const chartDataResolvers = {
         case 'DAY':
           return queryPlantByDay(id)
             .then(res => {
-              console.log(res[0])
-
-              console.log('TIME', Date.now() - start)
               return formatPlantResponse(res)
             })
         case 'WEEK':
           return queryPlantByWeek(id)
             .then(res => {
-              console.log('TIME', Date.now() - start)
               return formatPlantResponse(res)
             })
         case 'MONTH':
           return queryPlantByMonth(id)
             .then(res => {
-              console.log('TIME', Date.now() - start)
               return formatPlantResponse(res)
             })
         case 'YEAR':
           return queryPlantByYear(id)
             .then(res => {
-              console.log('TIME', Date.now() - start)
               return formatPlantResponse(res)
             })
         }

@@ -9,23 +9,18 @@ const { resolvers } = require('../resolvers')
 
 const schema = makeExecutableSchema({ typeDefs, resolvers })
 
-const graphqlTestCall = async (query, variables, userId) => {
-  return graphql(
+const graphqlTestCall = async (query, variables) => {
+
+  const response = await graphql(
     schema,
     query,
-    undefined,
-    {
-      req: {
-        session: {
-          userId
-        }
-      },
-      res: {
-        clearCookie: () => { }
-      }
-    },
+    {},
+    {},
     variables
   )
+  console.log(response)
+  
+  return response
 }
 
 module.exports = {graphqlTestCall}
