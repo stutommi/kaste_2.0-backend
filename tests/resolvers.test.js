@@ -1,136 +1,158 @@
+// THIS TEST ALWAYS NEEDS TO BE RUN IN NODE TEST ENVIROMENT!
+
 // Libraries
 const mongoose = require('mongoose')
-// Helper funcs
-const { graphqlTestCall } = require('./graphqlTestCall')
+const axios = require('axios')
 // Models
-const Message = require('../models/message')
-const SensorDataByDay = require('../models/sensorDataByDay')
 const User = require('../models/user')
+// Utils
+const config = require('../utils/config')
+const {setupDB} = require('./testHelper')
 
-// MUTATIONS AND QUERIES COME HERE
-
-const createUser = `
-mutation createUser(
-  $name: String!
-  $username: String!
-  $password: String!
-  ) {
-  createUser(
-    name: $name
-    username: $username
-    password: $password
-  ) {
-    id
-    username
-    name
-    messages {
-      content
-    }
-    passwordHash
-    sensorEndpoint
+beforeEach( async () => {
+  try {
+    await mongoose.connect(config.mongoUrl, 
+      {
+        useNewUrlParser: true,
+        useCreateIndex: true,
+        useFindAndModify: false
+      })
+    await setupDB()
+  } catch (error) {
+    console.log(error)
   }
-}
-`
+})
 
-const createMessage = `
-mutation createMessage(
-  $content: String!
-  ) {
-  createMessage(
-    content: $content
-  ) {
-    content
-    user {
-      name
-    }
-    created
-    id
-  }
-}
-`
+describe('user resolvers', () => {
 
-const editUserSensorEndpoint = `
-mutation editUserSensorEndpoint(
-  $sensorEndpoint: String!
-  ) {
-    editUserSensorEndpoint(
-    sensorEndpoint: $sensorEndpoint
-  ) {
-    sensorEndpoint
-    name
-    username
-  }
-}
-`
-
-const loginUser = `
-mutation loginUser(
-  $password: String!
-  $username: String!
-  ) {
-  login(
-    password: $password
-    username: $username
-  ) {
-    value
-    username
-    sensorEndpoint
-  }
-}
-`
-
-const chartData = `
-  query ChartData($id: Int!, $type: HousePlant!, $range: DayWeekMonthYear!) {
-  chartData(id: $id, type: $type, range: $range) {
-    time
-    light
-    nutrient
-    soilMoisture
-    temperatureC
-    humidity
-  }
-}
-`
-
-const currentUser = `
-{
-  me {
-    name
-    username
-    id
-    sensorEndpoint
-  }
-}
-`
-// beforeEach(async () => {
-//   await Message.remove({})
-//   await SensorDataByDay.remove({})
-//   await User.remove({})
-// })
-
-// afterEach(() => {
-
-// })
-
-// TESTS
-describe.only('Resolvers', () => {
-
-  it.only('createUser creates a user', async () => {
-    const testUser = {
-      name: 'testName',
-      username: 'testUsername',
-      password: 'testPassword'
-    }
-    console.log('hea')
-
-    const response = await graphqlTestCall(createUser, {
-      name: testUser.name,
-      username: testUser.username,
-      password: testUser.password
+  test('createUser', async () => {
+    const response = await axios.post('http://localhost:4000/graphql', {
+      query: `
+      mutation {
+        createUser(username: "testUsername1", name: "testName1", password: "testPassword1") {
+          username
+          messages {
+            id
+            content
+            created
+          }
+          sensorEndpoint
+          name
+        }
+      }
+      `
     })
-    console.log('hei')
 
-    // expect(response).toEqual({ data: { register: true } })
+    const { data } = response
+    expect(data).toMatchObject({
+      data: {
+        createUser: {
+          username: 'testUsername1',
+          messages: [],
+          sensorEndpoint: '',
+          name: 'testName1'
+        }
+      }
+    })
+
   })
+
+  // Testing many resolvers in one to avoid having to login with other tests
+  test('login, me and editSensorEndpoint', async () => {
+    const loginResponse = await axios.post('http://localhost:4000/graphql', {
+      query: `
+      mutation {
+        login(password:"testPassword", username: "testUsername") {
+          sensorEndpoint
+          username
+        }
+      }
+      `
+    })
+
+    // Assert login
+    const { data } = loginResponse
+    expect(data).toMatchObject({
+      data: {
+        login: {
+          sensorEndpoint: '',
+          username: 'testUsername'
+        }
+      }
+    })
+
+    // Get token (=value) for other requests
+    const { data: { data: { login : value } } } = await axios.post('http://localhost:4000/graphql', {
+      query: `
+      mutation {
+        login(password:"testPassword", username: "testUsername") {
+          value
+        }
+      }
+      `
+    })
+    
+    const editUserSensorEndpointResponse = await axios.post('http://localhost:4000/graphql', {
+      query: `
+      mutation {
+        editUserSensorEndpoint(sensorEndpoint: "testUrl") {
+          username
+          name
+          sensorEndpoint
+        }
+      }
+      `
+    },
+    {
+      headers: {
+        authorization: `bearer ${value.value}`
+      },
+    })
+
+    // Assert editUserSensorEndpoint
+    expect(editUserSensorEndpointResponse.data).toMatchObject({
+      data: {
+        editUserSensorEndpoint: {
+          sensorEndpoint: 'testUrl',
+          username: 'testUsername',
+          name: 'testName'
+        }
+      }
+    })
+
+    const meResponse = await axios.post('http://localhost:4000/graphql', {
+      query: `
+      query {
+        me {
+          username
+          name
+          sensorEndpoint
+        }
+      }
+      `
+    },
+    {
+      headers: {
+        authorization: `bearer ${value.value}`
+      },
+    })
+
+    // Assert me
+    expect(meResponse.data).toMatchObject({
+      data: {
+        me: {
+          sensorEndpoint: 'testUrl',
+          username: 'testUsername',
+          name: 'testName'
+        }
+      }
+    })
+
+  })
+})
+
+afterAll( async () => {
+  await User.deleteMany({})
+  mongoose.connection.close()
 })
 

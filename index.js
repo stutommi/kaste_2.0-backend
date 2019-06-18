@@ -17,7 +17,12 @@ const { resolvers } = require('./resolvers')
 
 mongoose.set('useFindAndModify', false)
 
-mongoose.connect(config.mongoUrl, { useNewUrlParser: true })
+mongoose.connect(config.mongoUrl,
+  {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+  })
   .then(() => logger.info('connected to database'))
   .catch(error => logger.error('error connecting to database', error.message))
 
@@ -27,7 +32,6 @@ const server = new ApolloServer({
   context: async ({ req }) => {
 
     const authorization = req ? req.headers.authorization : null
-
     if (authorization && authorization.startsWith('bearer ')) {
 
       const decodedToken = jwt.verify(authorization.substring(7), config.SECRET)
@@ -54,3 +58,5 @@ httpServer.listen({ port: config.PORT }, () => {
   console.log(`🚀 Server ready at http://localhost:${config.PORT}${server.graphqlPath}`)
   console.log(`🚀 Subscriptions ready at ws://localhost:${config.PORT}${server.subscriptionsPath}`)
 })
+
+module.exports = app
