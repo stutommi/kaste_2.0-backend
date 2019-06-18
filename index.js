@@ -32,7 +32,7 @@ const server = new ApolloServer({
   context: async ({ req }) => {
 
     const authorization = req ? req.headers.authorization : null
-    console.log(authorization)
+
     if (authorization && authorization.startsWith('bearer ')) {
 
       const decodedToken = jwt.verify(authorization.substring(7), config.SECRET)

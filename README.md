@@ -6,7 +6,7 @@ Live: https://lit-forest-54340.herokuapp.com/
 
 Link to frontend source: https://github.com/stutommi/kaste_2.0-frontend
 
-This is a project that aims to update my first plant-watering app called kaste. It is a collaboration with my brother. My brother takes care of sensordata and watering mechanics, and makes it accessible through an API. My job is to store that data to database and provide information and interactivity to be accessed by the user from the UI.
+This is a project that aims to update my first plant-watering app called Kaste. It is a collaboration with my brother. My brother takes care of sensordata and watering mechanics, and makes it accessible through an API. My job is to store that data to database and provide information and interactivity to be accessed by the user from the UI.
 
 The aim of the app is to provide information on house plants and enable remote-watering.
 this repository includes the UI the users will interact with. It is to be built as a web app using React and might expand to mobile version also featuring react-native.
