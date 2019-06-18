@@ -13,7 +13,7 @@ const messageResolvers = {
   },
   Mutation: {
     createMessage: async (root, args, { currentUser }) => {
-
+      console.log('FIRED')
       if (!currentUser) {
         throw new AuthenticationError('Not authenticated')
       }
