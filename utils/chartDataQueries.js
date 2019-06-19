@@ -75,7 +75,6 @@ const queryHouseByWeek = async (id) => {
       },
       { $sort: { 'time': 1 } },
     ])
-console.log(response)
 
     return response
 
