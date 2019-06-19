@@ -1,4 +1,4 @@
-// THIS TEST ALWAYS NEEDS TO BE RUN IN NODE TEST ENVIROMENT!
+// THIS TEST ALWAYS NEEDS TO BE RUN WITH SERVER IN NODE TEST ENVIROMENT!
 
 // Libraries
 const mongoose = require('mongoose')
@@ -7,7 +7,7 @@ const axios = require('axios')
 const User = require('../models/user')
 // Utils
 const config = require('../utils/config')
-const {setupDB} = require('./testHelper')
+const {setupUser, clearDB} = require('./testHelper')
 
 beforeEach( async () => {
   try {
@@ -17,7 +17,7 @@ beforeEach( async () => {
         useCreateIndex: true,
         useFindAndModify: false
       })
-    await setupDB()
+    await setupUser()
   } catch (error) {
     console.log(error)
   }
@@ -152,7 +152,7 @@ describe('user resolvers', () => {
 })
 
 afterAll( async () => {
-  await User.deleteMany({})
+  await clearDB()
   mongoose.connection.close()
 })
 

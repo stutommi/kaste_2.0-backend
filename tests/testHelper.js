@@ -1,11 +1,10 @@
 // Libraries
-const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+const axios = require('axios')
 // Models
 const User = require('../models/user')
 const Message = require('../models/message')
-const sensorDataByDay = require('../models/sensorDataByDay')
+const SensorDataByDay = require('../models/sensorDataByDay')
 
 const testUser = {
   username: 'testUsername',
@@ -13,8 +12,20 @@ const testUser = {
   password: 'testPassword'
 }
 
+const testMessages = [
+  {
+    content: 'Test content 1'
+  },
+  {
+    content: 'Test content 2'
+  },
+  {
+    content: 'Test content 3'
+  }
+]
 
-const setupDB = async () => {
+
+const setupUser = async () => {
 
   const saltRounds = 10
 
@@ -34,4 +45,28 @@ const setupDB = async () => {
   }
 }
 
-module.exports = {setupDB}
+const login = async () => {
+  const { data: { data: { login : value } } } = await axios.post('http://localhost:4000/graphql', {
+    query: `
+    mutation {
+      login(password:"${testUser.password}", username: "${testUser.username}") {
+        value
+      }
+    }
+    `
+  })
+
+  return value
+}
+
+const clearDB = async () => {
+  try {
+    await User.deleteMany({})
+    await Message.deleteMany({})
+    await SensorDataByDay.deleteMany({})
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+module.exports = {setupUser, login, clearDB}

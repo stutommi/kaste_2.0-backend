@@ -3,7 +3,7 @@ const { UserInputError, AuthenticationError, PubSub } = require('apollo-server')
 // Models
 const Message = require('../models/message')
 const User = require('../models/user')
-// Utils
+
 const pubsub = new PubSub()
 
 const messageResolvers = {
@@ -13,7 +13,6 @@ const messageResolvers = {
   },
   Mutation: {
     createMessage: async (root, args, { currentUser }) => {
-      console.log('FIRED')
       if (!currentUser) {
         throw new AuthenticationError('Not authenticated')
       }
