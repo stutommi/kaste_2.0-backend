@@ -1,3 +1,5 @@
+// For Cypress tests
+
 // Models
 const User = require('../models/user')
 const Message = require('../models/message')

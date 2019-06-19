@@ -12,18 +12,31 @@ const testUser = {
   password: 'testPassword'
 }
 
-const testMessages = [
+const testSensorData = [
   {
-    content: 'Test content 1'
+    time: new Date(123324324),
+    temperature: 5.25,
+    type: 'house',
+    location: 'attic',
+    humidity: 24
   },
   {
-    content: 'Test content 2'
+    time: new Date(2423324324),
+    temperature: 7.33,
+    type: 'house',
+    location: 'toilet',
+    humidity: 34
   },
   {
-    content: 'Test content 3'
+    time: new Date(242332342),
+    temperature: 2.23,
+    type: 'plant',
+    location: 'Wisteria Sinensis',
+    soil_moisture: 66,
+    light: 46,
+    nutrient: 22
   }
 ]
-
 
 const setupUser = async () => {
 
@@ -43,6 +56,14 @@ const setupUser = async () => {
   } catch (error) {
     console.log(error)
   }
+}
+
+const setupSensorData = async () => {
+  const sensorObjects = testSensorData.map(sensor => new SensorDataByDay(sensor))
+
+  const promiseArray = sensorObjects.map(sensor => sensor.save())
+
+  await Promise.all(promiseArray)
 }
 
 const login = async () => {
@@ -69,4 +90,4 @@ const clearDB = async () => {
   }
 }
 
-module.exports = {setupUser, login, clearDB}
+module.exports = {setupUser, login, clearDB, setupSensorData}

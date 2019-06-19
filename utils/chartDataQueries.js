@@ -17,6 +17,7 @@ const SensorData = require('../models/sensorDataByDay')
 /////////////////////////////////////
 
 const queryHouseByDay = async (id) => {
+
   try {
     const response = await SensorData.aggregate([
       { $unwind: '$measures' },
@@ -33,12 +34,11 @@ const queryHouseByDay = async (id) => {
         $match: {
           sensorId: { $eq: id },
           day: { $gte: new Date(moment.utc().subtract(1, 'days').startOf('day')) },
-          time: { $gte: new Date(moment.utc().subtract(1, 'days')) }
+          time: { $gte: new Date(moment().subtract(1, 'days').add(3, 'hours')) }
         }
       },
       { $sort: { 'time': 1 } },
     ])
-
     return response
 
   } catch (error) {
@@ -59,6 +59,7 @@ const queryHouseByWeek = async (id) => {
           sensorId: 1,
           day: 1,
           hour: { $hour: '$measures.time' },
+          minute: { $minute: '$measures.time' },
           time: '$measures.time',
           humidity: '$measures.humidity',
           temperature: '$measures.temperature_C'
@@ -68,13 +69,13 @@ const queryHouseByWeek = async (id) => {
         $match: {
           sensorId: { $eq: id },
           day: { $gte: new Date(moment.utc().subtract(1, 'weeks').startOf('day')) },
-          hour: {
-            $in: [0, 3, 6, 9, 12, 15, 18, 21]
-          }
+          hour: { $in: [0, 3, 6, 9, 12, 15, 18, 21] },
+          minute: { $lt: 30 }
         }
       },
       { $sort: { 'time': 1 } },
     ])
+console.log(response)
 
     return response
 
@@ -96,6 +97,7 @@ const queryHouseByMonth = async (id) => {
           sensorId: 1,
           day: 1,
           hour: { $hour: '$measures.time' },
+          minute: { $minute: '$measures.time' },
           time: '$measures.time',
           humidity: '$measures.humidity',
           temperature: '$measures.temperature_C'
@@ -105,9 +107,8 @@ const queryHouseByMonth = async (id) => {
         $match: {
           sensorId: { $eq: id },
           day: { $gte: new Date(moment.utc().subtract(1, 'months').startOf('day')) },
-          hour: {
-            $in: [0, 3, 6, 9, 12, 15, 18, 21]
-          }
+          hour: { $in: [0, 3, 6, 9, 12, 15, 18, 21] },
+          minute: { $lt: 30 }
         }
       },
       { $sort: { 'time': 1 } },
@@ -133,6 +134,7 @@ const queryHouseByYear = async (id) => {
           sensorId: 1,
           day: 1,
           hour: { $hour: '$measures.time' },
+          minute: { $minute: '$measures.time' },
           time: '$measures.time',
           humidity: '$measures.humidity',
           temperature: '$measures.temperature_C'
@@ -142,9 +144,8 @@ const queryHouseByYear = async (id) => {
         $match: {
           sensorId: { $eq: id },
           day: { $gte: new Date(moment.utc().subtract(1, 'years').startOf('day')) },
-          hour: {
-            $in: [0, 3, 6, 9, 12, 15, 18, 21]
-          }
+          hour: { $in: [0, 3, 6, 9, 12, 15, 18, 21] },
+          minute: { $lt: 30 }
         }
       },
       { $sort: { 'time': 1 } },
@@ -185,7 +186,7 @@ const queryPlantByDay = async (id) => {
         $match: {
           sensorId: { $eq: id },
           day: { $gte: new Date(moment.utc().subtract(1, 'days').startOf('day')) },
-          time: { $gte: new Date(moment.utc().subtract(1, 'days')) }
+          time: { $gte: new Date(moment().subtract(1, 'days').add(3, 'hours')) }
         }
       },
       { $sort: { 'time': 1 } },
@@ -211,6 +212,7 @@ const queryPlantByWeek = async (id) => {
           sensorId: 1,
           day: 1,
           hour: { $hour: '$measures.time' },
+          minute: { $minute: '$measures.time' },
           time: '$measures.time',
           soilMoisture: '$measures.soil_moisture',
           light: '$measures.light',
@@ -222,9 +224,8 @@ const queryPlantByWeek = async (id) => {
         $match: {
           sensorId: { $eq: id },
           day: { $gte: new Date(moment.utc().subtract(1, 'weeks').startOf('day')) },
-          hour: {
-            $in: [0, 3, 6, 9, 12, 15, 18, 21]
-          }
+          hour: { $in: [0, 3, 6, 9, 12, 15, 18, 21] },
+          minute: { $lt: 30 }
         }
       },
       { $sort: { 'time': 1 } },
@@ -250,6 +251,7 @@ const queryPlantByMonth = async (id) => {
           sensorId: 1,
           day: 1,
           hour: { $hour: '$measures.time' },
+          minute: { $minute: '$measures.time' },
           time: '$measures.time',
           soilMoisture: '$measures.soil_moisture',
           light: '$measures.light',
@@ -261,9 +263,8 @@ const queryPlantByMonth = async (id) => {
         $match: {
           sensorId: { $eq: id },
           day: { $gte: new Date(moment.utc().subtract(1, 'months').startOf('day')) },
-          hour: {
-            $in: [0, 3, 6, 9, 12, 15, 18, 21]
-          }
+          hour: { $in: [0, 3, 6, 9, 12, 15, 18, 21] },
+          minute: { $lt: 30 }
         }
       },
       { $sort: { 'time': 1 } },
@@ -289,6 +290,7 @@ const queryPlantByYear = async (id) => {
           sensorId: 1,
           day: 1,
           hour: { $hour: '$measures.time' },
+          minute: { $minute: '$measures.time' },
           time: '$measures.time',
           soilMoisture: '$measures.soil_moisture',
           light: '$measures.light',
@@ -300,9 +302,8 @@ const queryPlantByYear = async (id) => {
         $match: {
           sensorId: { $eq: id },
           day: { $gte: new Date(moment.utc().subtract(1, 'years').startOf('day')) },
-          hour: {
-            $in: [0, 3, 6, 9, 12, 15, 18, 21]
-          }
+          hour: { $in: [0, 3, 6, 9, 12, 15, 18, 21] },
+          minute: { $lt: 30 }
         }
       },
       { $sort: { 'time': 1 } },
