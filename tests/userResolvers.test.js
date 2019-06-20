@@ -3,8 +3,6 @@
 // Libraries
 const mongoose = require('mongoose')
 const axios = require('axios')
-// Models
-const User = require('../models/user')
 // Utils
 const config = require('../utils/config')
 const {setupUser, clearDB} = require('./testHelper')
