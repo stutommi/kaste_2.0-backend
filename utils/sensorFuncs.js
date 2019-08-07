@@ -25,7 +25,8 @@ const fetchSensors = async url => {
       'ec_mS_cm',
       'light_lux',
       'soil_moisture',
-      'name'
+      'name',
+      'CO2_ppm'
     ]
 
     // format sensors for update to DB
@@ -45,9 +46,6 @@ const fetchSensors = async url => {
 
     })
 
-    const foo = await SensorDataByDay.find({})
-    console.log('foo', foo[4])
-    // POISTA
     console.log('Update:' + new Date(Date.now()).toUTCString())
   }
   catch (error) {

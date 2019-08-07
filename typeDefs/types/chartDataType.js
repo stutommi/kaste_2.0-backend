@@ -11,6 +11,7 @@ type ChartData {
   temperature_C: [Float!]!
   ec_mS_cm: [Float]
   light_lux: [Int]
+  CO2_ppm: [Int]
   soil_moisture: [Int]
   humidity: [Int]
 }

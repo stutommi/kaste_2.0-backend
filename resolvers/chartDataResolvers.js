@@ -26,9 +26,12 @@ const chartDataResolvers = {
               obj.time.push(cur.time)
               obj.humidity.push(cur.humidity)
               obj.temperature_C.push(cur.temperature_C)
+              if (obj.CO2_ppm != undefined) {
+                obj.CO2_ppm.push(cur.CO2_ppm)
+              }
 
               return obj
-            }, { time: [], humidity: [], temperature_C: [] })
+            }, { time: [], humidity: [], temperature_C: [], CO2_ppm: [] })
 
           return formattedResponse
         }

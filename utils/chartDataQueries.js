@@ -27,7 +27,8 @@ const queryHouseByDay = async (id) => {
           day: 1,
           time: '$measures.time',
           humidity: '$measures.humidity',
-          temperature_C: '$measures.temperature_C'
+          temperature_C: '$measures.temperature_C',
+          CO2_ppm: '$measures.CO2_ppm'
         }
       },
       {
@@ -40,7 +41,6 @@ const queryHouseByDay = async (id) => {
       { $sort: { 'time': 1 } },
     ])
     return response
-
   } catch (error) {
     console.error(error.message)
   }
@@ -62,7 +62,8 @@ const queryHouseByWeek = async (id) => {
           minute: { $minute: '$measures.time' },
           time: '$measures.time',
           humidity: '$measures.humidity',
-          temperature_C: '$measures.temperature_C'
+          temperature_C: '$measures.temperature_C',
+          CO2_ppm: '$measures.CO2_ppm'
         }
       },
       {
@@ -99,7 +100,8 @@ const queryHouseByMonth = async (id) => {
           minute: { $minute: '$measures.time' },
           time: '$measures.time',
           humidity: '$measures.humidity',
-          temperature_C: '$measures.temperature_C'
+          temperature_C: '$measures.temperature_C',
+          CO2_ppm: '$measures.CO2_ppm'
         }
       },
       {
@@ -136,7 +138,8 @@ const queryHouseByYear = async (id) => {
           minute: { $minute: '$measures.time' },
           time: '$measures.time',
           humidity: '$measures.humidity',
-          temperature_C: '$measures.temperature_C'
+          temperature_C: '$measures.temperature_C',
+          CO2_ppm: '$measures.CO2_ppm'
         }
       },
       {
