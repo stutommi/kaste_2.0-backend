@@ -8,10 +8,10 @@ scalar Date
 
 type ChartData {
   time: [Date!]!
-  temperatureC: [Float!]!
-  nutrient: [Float]
-  light: [Float]
-  soilMoisture: [Int]
+  temperature_C: [Float!]!
+  ec_mS_cm: [Float]
+  light_lux: [Int]
+  soil_moisture: [Int]
   humidity: [Int]
 }
 `

@@ -28,12 +28,19 @@ const sensorDataSchema = mongoose.Schema({
   soil_moisture: {
     type: Number
   },
-  light: {
+  light_lux: {
     type: Number
   },
-  nutrient: {
+  ec_mS_cm: {
     type: Number
+  },
+  CO2_ppm: {
+    type: Number
+  },
+  name: {
+    type: String
   }
+
 
 })
 

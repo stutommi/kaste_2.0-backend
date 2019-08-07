@@ -27,7 +27,7 @@ const queryHouseByDay = async (id) => {
           day: 1,
           time: '$measures.time',
           humidity: '$measures.humidity',
-          temperature: '$measures.temperature_C'
+          temperature_C: '$measures.temperature_C'
         }
       },
       {
@@ -62,7 +62,7 @@ const queryHouseByWeek = async (id) => {
           minute: { $minute: '$measures.time' },
           time: '$measures.time',
           humidity: '$measures.humidity',
-          temperature: '$measures.temperature_C'
+          temperature_C: '$measures.temperature_C'
         }
       },
       {
@@ -99,7 +99,7 @@ const queryHouseByMonth = async (id) => {
           minute: { $minute: '$measures.time' },
           time: '$measures.time',
           humidity: '$measures.humidity',
-          temperature: '$measures.temperature_C'
+          temperature_C: '$measures.temperature_C'
         }
       },
       {
@@ -136,7 +136,7 @@ const queryHouseByYear = async (id) => {
           minute: { $minute: '$measures.time' },
           time: '$measures.time',
           humidity: '$measures.humidity',
-          temperature: '$measures.temperature_C'
+          temperature_C: '$measures.temperature_C'
         }
       },
       {
@@ -175,10 +175,10 @@ const queryPlantByDay = async (id) => {
           day: 1,
           hour: { $hour: '$measures.time' },
           time: '$measures.time',
-          soilMoisture: '$measures.soil_moisture',
-          light: '$measures.light',
-          nutrient: '$measures.nutrient',
-          temperature: '$measures.temperature_C'
+          soil_moisture: '$measures.soil_moisture',
+          light_lux: '$measures.light_lux',
+          ec_mS_cm: '$measures.ec_mS_cm',
+          temperature_C: '$measures.temperature_C',
         }
       },
       {
@@ -213,10 +213,10 @@ const queryPlantByWeek = async (id) => {
           hour: { $hour: '$measures.time' },
           minute: { $minute: '$measures.time' },
           time: '$measures.time',
-          soilMoisture: '$measures.soil_moisture',
-          light: '$measures.light',
-          nutrient: '$measures.nutrient',
-          temperature: '$measures.temperature_C'
+          soil_moisture: '$measures.soil_moisture',
+          light_lux: '$measures.light_lux',
+          ec_mS_cm: '$measures.ec_mS_cm',
+          temperature_C: '$measures.temperature_C',
         }
       },
       {
@@ -252,10 +252,10 @@ const queryPlantByMonth = async (id) => {
           hour: { $hour: '$measures.time' },
           minute: { $minute: '$measures.time' },
           time: '$measures.time',
-          soilMoisture: '$measures.soil_moisture',
-          light: '$measures.light',
-          nutrient: '$measures.nutrient',
-          temperature: '$measures.temperature_C'
+          soil_moisture: '$measures.soil_moisture',
+          light_lux: '$measures.light_lux',
+          ec_mS_cm: '$measures.ec_mS_cm',
+          temperature_C: '$measures.temperature_C',
         }
       },
       {
@@ -291,10 +291,10 @@ const queryPlantByYear = async (id) => {
           hour: { $hour: '$measures.time' },
           minute: { $minute: '$measures.time' },
           time: '$measures.time',
-          soilMoisture: '$measures.soil_moisture',
-          light: '$measures.light',
-          nutrient: '$measures.nutrient',
-          temperature: '$measures.temperature_C'
+          soil_moisture: '$measures.soil_moisture',
+          light_lux: '$measures.light_lux',
+          ec_mS_cm: '$measures.ec_mS_cm',
+          temperature_C: '$measures.temperature_C',
         }
       },
       {

@@ -25,10 +25,10 @@ const chartDataResolvers = {
 
               obj.time.push(cur.time)
               obj.humidity.push(cur.humidity)
-              obj.temperatureC.push(cur.temperature)
+              obj.temperature_C.push(cur.temperature_C)
 
               return obj
-            }, { time: [], humidity: [], temperatureC: [] })
+            }, { time: [], humidity: [], temperature_C: [] })
 
           return formattedResponse
         }
@@ -64,19 +64,21 @@ const chartDataResolvers = {
           const formattedResponse = response
             .reduce((obj, cur) => {
 
+              obj.name.push(cur.name)
               obj.time.push(cur.time)
-              obj.temperatureC.push(cur.temperature)
-              obj.soilMoisture.push(cur.soilMoisture)
-              obj.light.push(cur.light)
-              obj.nutrient.push(cur.nutrient)
+              obj.temperature_C.push(cur.temperature_C)
+              obj.soil_moisture.push(cur.soil_moisture)
+              obj.light_lux.push(cur.light_lux)
+              obj.ec_mS_cm.push(cur.ec_mS_cm)
 
               return obj
             }, {
+              name: [],
               time: [],
-              temperatureC: [],
-              soilMoisture: [],
-              light: [],
-              nutrient: []
+              temperature_C: [],
+              soil_moisture: [],
+              light_lux: [],
+              ec_mS_cm: []
             })
 
           return formattedResponse

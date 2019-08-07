@@ -12,20 +12,20 @@ const User = require('../models/user')
 const fetchSensors = async url => {
   try {
     const { data } = await axios.get(url)
-
     // Merge different sensortypes
     const sensors = Object.values(data.sensors)
       .reduce((acc, cur) => acc.concat(cur))
-
+    
     const measureTypes = [
       'temperature_C',
       'type',
       'location',
       'time',
       'humidity',
-      'nutrient',
-      'light',
-      'soil_moisture'
+      'ec_mS_cm',
+      'light_lux',
+      'soil_moisture',
+      'name'
     ]
 
     // format sensors for update to DB
@@ -45,6 +45,9 @@ const fetchSensors = async url => {
 
     })
 
+    const foo = await SensorDataByDay.find({})
+    console.log('foo', foo[4])
+    // POISTA
     console.log('Update:' + new Date(Date.now()).toUTCString())
   }
   catch (error) {
@@ -67,7 +70,6 @@ const startFetchingAllEndpoints = async (fetchFunc) => {
       if (!acc.includes(cur)) {
         acc.push(cur)
       }
-
       return acc
     }, [])
 
