@@ -33,6 +33,7 @@ const messageResolvers = {
         await User.findByIdAndUpdate(currentUser._id, {
           messages: currentUser.messages.concat(savedMessage._id)
         })
+
         // For subscriptions
         pubsub.publish('messageAdded', {messageAdded: populatedMessage})
 
@@ -44,7 +45,8 @@ const messageResolvers = {
   },
   Subscription: {
     messageAdded: {
-      subscribe: () => pubsub.asyncIterator(([['messageAdded']]))
+      subscribe: () => {
+        return pubsub.asyncIterator(([['messageAdded']])) }
     }
   }
 }

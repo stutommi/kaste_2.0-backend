@@ -18,6 +18,9 @@ const mutation = gql`
       password: String!
       username: String!
     ): Token
+    clearChartData(
+      id: ID
+    ): Void
     startWatering(sensorEndpoint: String!): Void
     stopWatering(sensorEndpoint: String!): Void
     reboot(sensorEndpoint: String!): Void

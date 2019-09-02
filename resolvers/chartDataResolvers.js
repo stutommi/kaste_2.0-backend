@@ -1,3 +1,7 @@
+// Libraries
+const mongoose = require('mongoose')
+// Models
+const sensorDataByDay = require('../models/sensorDataByDay')
 // Queries
 const {
   queryHouseByDay,
@@ -111,6 +115,19 @@ const chartDataResolvers = {
         }
       }
 
+    }
+  },
+  Mutation: {
+    clearChartData: async (root, { id }) => {
+      try {
+        const res = await sensorDataByDay.deleteMany({sensorId: id})
+        console.log('Deletion succesful ', res)
+        
+      } catch (error) {
+        console.log(error)
+        
+        //throw new Error('failed to clear data')
+      }
     }
   }
 }
