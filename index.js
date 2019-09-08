@@ -10,7 +10,6 @@ const User = require('./models/user')
 // Utils
 const config = require('./utils/config')
 const logger = require('./utils/logger')
-require('./sensorEndpoints')
 // GQLtypeDefs and resolvers
 const { typeDefs } = require('./typeDefs')
 const { resolvers } = require('./resolvers')
