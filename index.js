@@ -14,8 +14,6 @@ const logger = require('./utils/logger')
 const { typeDefs } = require('./typeDefs')
 const { resolvers } = require('./resolvers')
 
-mongoose.set('useFindAndModify', false)
-
 mongoose.connect(config.mongoUrl,
   {
     useNewUrlParser: true,
@@ -29,7 +27,6 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: async ({ req }) => {
-
     const authorization = req ? req.headers.authorization : null
 
     if (authorization && authorization.startsWith('bearer ')) {

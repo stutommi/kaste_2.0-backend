@@ -35,8 +35,6 @@ const mutation = gql`
   }
 `
 
-
-
 module.exports = {
   mutation
 }
